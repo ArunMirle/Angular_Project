@@ -1,0 +1,311 @@
+<!-- Add this to the head section of your index.html -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    integrity="sha384-GLhlTQ8i6I+rdLGlj4WzDOdk3PnYwSVGgFf5i6I5eVN/L9aL6ZfGznUWlIccIY7" crossorigin="anonymous">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!-- Add this to the head section of your index.html -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- In your Angular component's template -->
+<div class="mt-4 full-height-container">
+    <div class="card">
+        <div class="d-flex flex-column align-items-center">
+            <h1> Registation</h1>
+        </div>
+        <form>
+
+            <div class="form-group">
+                <label>First Name</label>
+                <input type="text" [(ngModel)]="firstname" [ngModelOptions]="{standalone: true}" class="form-control"
+                    id="firstname" placeholder="">
+                <div *ngIf="formSubmitted && !firstname" class="text-danger">Please enter your first name.</div>
+            </div>
+
+            <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" [(ngModel)]="lastname" [ngModelOptions]="{standalone: true}" class="form-control"
+                    id="lastname" placeholder="">
+                <div *ngIf="formSubmitted && !lastname" class="text-danger">Please enter your Last Name.</div>
+            </div>
+
+            <div class="form-group">
+                <label>Email id</label>
+                <input type="text" [(ngModel)]="emailAddress" [ngModelOptions]="{standalone: true}" class="form-control"
+                    id="emailAddress" placeholder="">
+                <div *ngIf="formSubmitted && duplicateError" class="text-danger">{{ duplicateError }}</div>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" [(ngModel)]="password" [ngModelOptions]="{standalone: true}" class="form-control"
+                    id="password" placeholder="">
+                <div *ngIf="formSubmitted && !password" class="text-danger">Please enter your Password</div>
+
+                <!-- Add a button to trigger the resetForm method -->
+
+
+                <button type="submit" class="btn btn-primary mt-4" (click)="save()">Submit</button>
+            </div>
+        </form>
+        <div class="full-height-table-container">
+            <div class="container mt-4">
+                <button class="btn btn-sm btn-primary button-spacing" (click)="toggleView('table')">Table
+                    View</button>
+                <button class="btn btn-sm btn-primary button-spacing" (click)="toggleView('grid')">Grid
+                    View</button>
+                <button class="btn btn-sm btn-primary" (click)="toggleView('tile')">Tile View</button>
+
+
+                <!-- Table View -->
+                <div *ngIf="showTableView">
+                    <div class="container mt-4">
+                        <h1>Table View</h1>
+
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <!-- Table header with sorting buttons on the right -->
+                                        <!-- Table header with sorting buttons on the right -->
+                                        <th scope="col"
+                                            *ngFor="let column of ['id', 'firstName', 'lastName', 'emailAddress']">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span>{{ column | titlecase }}</span>
+                                                <button class="btn btn-link" (click)="handleSortButtonClick(column)">
+                                                    <i class="fa fa-arrow-up"
+                                                        *ngIf="sortedColumn !== column || !isAscending"></i>
+                                                    <i class="fa fa-arrow-down"
+                                                        *ngIf="sortedColumn !== column || !isDescending"></i>
+                                                </button>
+                                            </div>
+                                        </th>
+                                        <th scope="col">Password</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let StudentItem of StudentArray">
+                                        <td>{{ StudentItem.id }}</td>
+                                        <td>{{ StudentItem.firstName }}</td>
+                                        <td>{{ StudentItem.lastName }}</td>
+                                        <td>{{ StudentItem.emailAddress }}</td>
+                                        <td>{{ StudentItem.password }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-success"
+                                                (click)="setUpdate(StudentItem)">
+                                                <i class="fas fa-edit"></i> <!-- Edit Icon -->
+                                            </button>
+
+                                            <button type="button" class="btn btn-danger"
+                                                (click)="setDelete(StudentItem)">
+                                                <i class="fas fa-trash-alt"></i> <!-- Delete Icon -->
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="row mt-4 pagination-buttons">
+                            <div class="col-3">
+                                <button class="btn btn-primary" (click)="onPrevious()" [disabled]="pageNumber === 1">
+                                    <i class="fas fa-arrow-left"></i> Previous
+                                </button>
+                            </div>
+                            <div class="col-7 text-center d-flex align-items-center">
+                                <!-- Add a container div with right margin -->
+                                <span>Go To Page</span> <!-- Add mb-0 to remove bottom margin -->
+
+                                <input type="number" [(ngModel)]="goToPageNumber" class="form-control form-control-lg"
+                                    style="width: 100px;" placeholder="">
+                                <button class="btn btn-primary btn-lg ml-2" (click)="onGoToPage()">></button>
+                                <button class="btn btn-light page-number-button" *ngFor="let page of getPages()"
+                                    [ngClass]="{'active': page === pageNumber}" (click)="onPageClick(page)">
+                                    {{ page }}
+                                </button>
+                            </div>
+                            <div class="col-2 text-right">
+                                <button class="btn btn-primary" (click)="onNext()" [disabled]="isNextButtonDisabled()">
+                                    Next <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+
+                            <div class="col-12 mt-2 record-range">
+                                {{ (totalRecordCount > 0) ? ((pageNumber - 1) * pageSize + 1) : 0 }} -
+                                {{ (pageNumber * pageSize <= totalRecordCount) ? (pageNumber * pageSize) :
+                                    totalRecordCount }} of {{ totalRecordCount }} </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+                    <!-- Grid View -->
+                    <div *ngIf="showGridView">
+                        <div class="container-fluid mt-4">
+                            <h1>Grid View</h1>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="container-fluid">
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col"
+                                                        *ngFor="let column of ['id', 'firstName', 'lastName', 'emailAddress']">
+                                                        {{ column | titlecase }}
+                                                        <button class="btn btn-link"
+                                                            (click)="handleSortButtonClick(column)">
+                                                            <i class="fa fa-arrow-up"
+                                                                *ngIf="sortedColumn !== column || !isAscending"></i>
+                                                            <i class="fa fa-arrow-down"
+                                                                *ngIf="sortedColumn !== column || !isDescending"></i>
+                                                        </button>
+                                                    </th>
+                                                    <th scope="col">Password</th>
+                                                    <th scope="col">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let StudentItem of StudentArray">
+                                                    <td>{{ StudentItem.id }}</td>
+                                                    <td>{{ StudentItem.firstName }}</td>
+                                                    <td>{{ StudentItem.lastName }}</td>
+                                                    <td>{{ StudentItem.emailAddress }}</td>
+                                                    <td>{{ StudentItem.password }}</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-success"
+                                                            (click)="setUpdate(StudentItem)">
+                                                            <i class="fas fa-edit"></i> <!-- Edit Icon -->
+                                                        </button>
+
+                                                        <button type="button" class="btn btn-danger"
+                                                            (click)="setDelete(StudentItem)">
+                                                            <i class="fas fa-trash-alt"></i> <!-- Delete Icon -->
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4 pagination-buttons">
+                                <div class="col-3">
+                                    <button class="btn btn-primary" (click)="onPrevious()"
+                                        [disabled]="pageNumber === 1">
+                                        <i class="fas fa-arrow-left"></i> Previous
+                                    </button>
+                                </div>
+                                <div class="col-7 text-center d-flex align-items-center">
+                                    <span>Go To Page</span>
+                                    <input type="number" [(ngModel)]="goToPageNumber"
+                                        class="form-control form-control-lg" style="width: 100px;" placeholder="">
+                                    <button class="btn btn-primary btn-lg ml-2" (click)="onGoToPage()">></button>
+                                    <button class="btn btn-light page-number-button" *ngFor="let page of getPages()"
+                                        [ngClass]="{'active': page === pageNumber}" (click)="onPageClick(page)">
+                                        {{ page }}
+                                    </button>
+                                </div>
+
+
+
+                                <div class="col-2 text-right">
+                                    <button class="btn btn-primary" (click)="onNext()"
+                                        [disabled]="isNextButtonDisabled()">
+                                        Next <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+
+                                <div class="col-12 mt-2 record-range">
+                                    {{ (totalRecordCount > 0) ? ((pageNumber - 1) * pageSize + 1) : 0 }} -
+                                    {{ (pageNumber * pageSize <= totalRecordCount) ? (pageNumber * pageSize) :
+                                        totalRecordCount }} of {{ totalRecordCount }} </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tile View -->
+
+                    <div *ngIf="showTileView">
+                        <div class="container mt-4">
+                            <h1>Tile View</h1>
+                            <th scope="col" *ngFor="let column of ['id', 'firstName', 'lastName', 'emailAddress']">
+                                {{ column | titlecase }}
+                                <button class="btn btn-link" (click)="handleSortButtonClick(column)">
+                                    <i class="fa fa-arrow-up" *ngIf="sortedColumn !== column || !isAscending"></i>
+                                    <i class="fa fa-arrow-down" *ngIf="sortedColumn !== column || !isDescending"></i>
+                                </button>
+                            </th>
+                            <div class="row">
+                                <div class="col-lg-4 col-md-12 mb-4 mb-lg-0" *ngFor="let StudentItem of StudentArray">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                {{ StudentItem.firstName }} {{ StudentItem.lastName }}
+
+                                                <!-- Edit Icon -->
+                                                <button type="button" class="btn btn-link"
+                                                    (click)="setUpdate(StudentItem)">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <!-- Delete Icon -->
+                                                <button type="button" class="btn btn-link"
+                                                    (click)="setDelete(StudentItem)">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="card-text">
+                                                <strong>ID:</strong> {{ StudentItem.id }}<br>
+                                                <strong>Email:</strong> {{ StudentItem.emailAddress }}<br>
+                                                <strong>Password:</strong> {{ StudentItem.password }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-3">
+                                    <button class="btn btn-primary" (click)="onPrevious()"
+                                        [disabled]="pageNumber === 1">
+                                        <i class="fas fa-arrow-left"></i> Previous
+                                    </button>
+                                </div>
+                                <div class="col-7 text-center d-flex align-items-center">
+                                    <span>Go To Page</span>
+                                    <input type="number" [(ngModel)]="goToPageNumber"
+                                        class="form-control form-control-lg" style="width: 100px;" placeholder="">
+                                    <button class="btn btn-primary btn-lg ml-2" (click)="onGoToPage()">></button>
+                                    <button class="btn btn-light page-number-button" *ngFor="let page of getPages()"
+                                        [ngClass]="{'active': page === pageNumber}" (click)="onPageClick(page)">
+                                        {{ page }}
+                                    </button>
+                                </div>
+                                <div class="col-2 text-right">
+                                    <button class="btn btn-primary" (click)="onNext()"
+                                        [disabled]="isNextButtonDisabled()">
+                                        Next <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+
+                                <div class="col-12 mt-2 record-range">
+                                    {{ (totalRecordCount > 0) ? ((pageNumber - 1) * pageSize + 1) : 0 }} -
+                                    {{ (pageNumber * pageSize <= totalRecordCount) ? (pageNumber * pageSize) :
+                                        totalRecordCount }} of {{ totalRecordCount }} </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+            </div>

@@ -1,0 +1,221 @@
+/* styles.css */
+input {
+    max-width: 200px;
+    /* Adjust the width as needed */
+}
+
+.custom-height {
+    height: 38px;
+    /* Adjust the height as needed */
+}
+
+.btn-lg {
+    padding: 0.5rem 1rem;
+    /* Adjust the padding as needed */
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    margin: 20px auto;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.table th,
+.table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+.table thead th {
+    background-color: #007bff;
+    border-bottom: 2px solid #ddd;
+    color: white;
+}
+
+.table tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+.pagination-buttons {
+    margin-top: 1rem;
+}
+
+.pagination-buttons button {
+    margin-right: 0.5rem;
+}
+
+.pagination-buttons button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.card {
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.table-container {
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
+.page-number-button {
+    margin-right: 5px;
+    /* Adjust spacing between page number buttons */
+    background-color: #f8f9fa;
+    /* Set background color */
+    color: #007bff;
+    /* Set text color */
+    border-color: #007bff;
+    /* Set border color */
+}
+
+.page-number-button:hover {
+    background-color: #007bff;
+    /* Change background color on hover */
+    color: #ffffff;
+    /* Change text color on hover */
+}
+
+.full-height-container {
+    height: 100vh;
+}
+
+.page-number-button.active {
+    background-color: #007bff;
+    /* Set background color for the active page */
+    color: #ffffff;
+    /* Set text color for the active page */
+}
+
+/* Optional: Add styling for the table cells */
+.table td {
+    text-align: center;
+}
+
+/* Style for the record range */
+.record-range {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* Add this to your component's CSS file or style section */
+.button-spacing {
+    margin-right: 8px;
+    /* Adjust the value based on your preference */
+}
+
+/* Additional styling for pagination buttons */
+.pagination-buttons {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pagination-buttons button {
+    margin-right: 0.5rem;
+    font-size: 14px;
+    /* Adjust font size */
+}
+
+.pagination-buttons button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Additional styling for the card container */
+.card-container {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+/* Optional: Adjust styling for form container */
+.form-container {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Optional: Add margin to form buttons */
+.form-container .btn {
+    margin-top: 10px;
+}
+
+/* Optional: Style the container holding both the table and record range */
+.table-and-range-container {
+    margin-top: 20px;
+}
+
+/* Optional: Style the container holding both the table and pagination buttons */
+.table-and-buttons-container {
+    margin-top: 20px;
+}
+
+/* Optional: Add margin to the record range for better spacing */
+.record-range {
+    margin-top: 10px;
+}
+
+/* Optional: Style the form labels for better visibility */
+.form-group label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    color: #007bff;
+    /* Set the color as needed */
+}
